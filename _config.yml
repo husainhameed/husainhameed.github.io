@@ -1,0 +1,27 @@
+title: Husain Hameed
+name: Husain Hameed
+description: University Educator | Researcher | Presenter
+url: "https://husainhameed.github.io"
+logo: "headshot.jpg"
+
+# Social Links
+author:
+  github: husainhameed
+  twitter: your_handle
+  googlescholar: your_id
+  orcid: 0000-0000-0000-0000
+
+# Navigation Links
+navigation:
+  - title: "About"
+    url: /index.html
+  - title: "Publications"
+    url: /publications/
+  - title: "Teaching"
+    url: /teaching/
+  - title: "Talks"
+    url: /talks/
+  - title: "CV"
+    url: /cv/
+
+theme: jekyll-theme-minimal # You can upgrade this later to 'al-folio'
