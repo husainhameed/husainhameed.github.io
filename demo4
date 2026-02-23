@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FINAL MASTER AI Authenticity Simulator</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at center,#020617,#000);
+  color:#e2e8f0;
+  text-align:center;
+  overflow-x:hidden;
+}
+
+/* TITLE */
+h1{
+  color:#38bdf8;
+  letter-spacing:2px;
+}
+
+/* RADAR SCANNER */
+#radar{
+  width:160px;
+  height:160px;
+  border:2px solid #38bdf8;
+  border-radius:50%;
+  margin:20px auto;
+  position:relative;
+}
+#radar::after{
+  content:"";
+  position:absolute;
+  width:50%;
+  height:2px;
+  background:#38bdf8;
+  top:50%;
+  left:50%;
+  transform-origin:left center;
+  animation:spin 2s linear infinite;
+}
+@keyframes spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+/* GAME CARD */
+.box{
+  background:#020617;
+  border:1px solid #38bdf8;
+  padding:28px;
+  margin:30px auto;
+  width:70%;
+  border-radius:18px;
+  box-shadow:0 0 30px rgba(56,189,248,0.25);
+  position:relative;
+}
+
+/* FAKE SOCIAL POST */
+.post{
+  background:#0f172a;
+  border-radius:12px;
+  padding:15px;
+  margin:12px 0;
+  text-align:left;
+}
+.username{
+  color:#38bdf8;
+  font-weight:bold;
+}
+
+/* BUTTONS */
+button{
+  padding:12px 20px;
+  margin:10px;
+  border:none;
+  border-radius:10px;
+  background:#0f172a;
+  color:white;
+  cursor:pointer;
+  font-size:16px;
+  transition:0.3s;
+}
+button:hover{
+  background:#38bdf8;
+  color:black;
+  transform:scale(1.06);
+}
+
+/* PROGRESS BAR */
+#meterBox{
+  width:70%;
+  margin:10px auto;
+  background:#020617;
+  border-radius:12px;
+}
+#meter{
+  height:20px;
+  width:0%;
+  background:linear-gradient(90deg,#22c55e,#38bdf8);
+  border-radius:12px;
+  transition:0.5s;
+}
+
+/* FEEDBACK */
+.correct{color:#22c55e;font-weight:bold;}
+.wrong{color:#ef4444;font-weight:bold;}
+.hidden{display:none;}
+
+/* GLITCH */
+.glitch{
+  animation:glitch 0.25s;
+}
+@keyframes glitch{
+  0%{transform:translate(8px);}
+  50%{transform:translate(-8px);}
+  100%{transform:translate(0);}
+}
+
+/* WARNING OVERLAY */
+#warning{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(255,0,0,0.08);
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🤖 FINAL MASTER AI AUTHENTICITY SIMULATOR</h1>
+<p>Scan. Detect. Verify. Survive AI manipulation.</p>
+
+<div id="radar"></div>
+
+<div id="meterBox"><div id="meter"></div></div>
+
+<div id="warning"></div>
+
+<!-- AI GUIDE -->
+<div class="box">
+<h2>🤖 AI Guide</h2>
+<p id="guideText">Welcome agent. Analyze the feed carefully.</p>
+</div>
+
+<!-- STEP 1 -->
+<div class="box" id="step1">
+<h2>🎬 Deepfake Viral Post</h2>
+
+<div class="post">
+<span class="username">@GlobalStar</span><br>
+“Emergency! Send money now — watch this video!”
+</div>
+
+<button onclick="deepfake('correct')">Verify trusted news</button>
+<button onclick="deepfake('wrong')">Share instantly</button>
+<button onclick="deepfake('wrong')">Believe visuals</button>
+
+<p id="r1"></p>
+</div>
+
+<!-- STEP 2 -->
+<div class="box hidden" id="step2">
+<h2>🎙️ AI Voice Clone</h2>
+
+<div class="post">
+Voice message: “This is your teacher. Send your login details.”
+</div>
+
+<button onclick="voice('correct')">Confirm through official channel</button>
+<button onclick="voice('wrong')">Send password</button>
+<button onclick="voice('wrong')">Trust the voice</button>
+
+<p id="r2"></p>
+</div>
+
+<!-- STEP 3 -->
+<div class="box hidden" id="step3">
+<h2>📧 AI Phishing Message</h2>
+
+<div class="post">
+school-alert@secure-login.co — “Account expires today.”
+</div>
+
+<button onclick="phish('correct')">Inspect sender domain</button>
+<button onclick="phish('wrong')">Click link</button>
+<button onclick="phish('wrong')">Download attachment</button>
+
+<p id="r3"></p>
+</div>
+
+<!-- FINAL -->
+<div class="box hidden" id="final">
+<h2>🔎 Final Verification Scan</h2>
+
+<button onclick="verify('correct')">Cross-check trusted sources</button>
+<button onclick="verify('wrong')">Trust comments</button>
+<button onclick="verify('wrong')">Assume AI is accurate</button>
+
+<p id="r4"></p>
+</div>
+
+<div class="box hidden" id="win">
+<h2 id="rank"></h2>
+<p>Simulation Complete.</p>
+</div>
+
+<script>
+let score=0;
+
+function fillMeter(){
+ score+=25;
+ meter.style.width=score+"%";
+}
+
+function glitch(){
+ document.body.classList.add("glitch");
+ warning.style.display="block";
+ setTimeout(()=>{
+   document.body.classList.remove("glitch");
+   warning.style.display="none";
+ },200);
+}
+
+function guide(msg){
+ guideText.innerText=msg;
+}
+
+function deepfake(c){
+ if(c==="correct"){
+   r1.innerHTML="<span class='correct'>Deepfake detected.</span>";
+   fillMeter();
+   guide("Good work agent. Deepfakes rely on urgency.");
+   step2.classList.remove("hidden");
+ }else{
+   r1.innerHTML="<span class='wrong'>You trusted a deepfake.</span>";
+   glitch();
+ }
+}
+
+function voice(c){
+ if(c==="correct"){
+   r2.innerHTML="<span class='correct'>Voice clone avoided.</span>";
+   fillMeter();
+   guide("AI voices can copy anyone. Always verify identity.");
+   step3.classList.remove("hidden");
+ }else{
+   r2.innerHTML="<span class='wrong'>Voice scam activated.</span>";
+   glitch();
+ }
+}
+
+function phish(c){
+ if(c==="correct"){
+   r3.innerHTML="<span class='correct'>Phishing detected.</span>";
+   fillMeter();
+   guide("Phishing often hides behind realistic domains.");
+   final.classList.remove("hidden");
+ }else{
+   r3.innerHTML="<span class='wrong'>You clicked a phishing trap.</span>";
+   glitch();
+ }
+}
+
+function verify(c){
+ if(c==="correct"){
+   fillMeter();
+   r4.innerHTML="<span class='correct'>Authenticity confirmed.</span>";
+   showRank();
+   win.classList.remove("hidden");
+ }else{
+   r4.innerHTML="<span class='wrong'>Verification failed.</span>";
+   glitch();
+ }
+}
+
+function showRank(){
+ if(score<=50){ rank.innerHTML="🎮 ROOKIE DETECTOR"; }
+ else if(score<=75){ rank.innerHTML="🧠 AI ANALYST"; }
+ else{ rank.innerHTML="🏆 AUTHENTICITY MASTER"; }
+}
+</script>
+
+</body>
+</html>
