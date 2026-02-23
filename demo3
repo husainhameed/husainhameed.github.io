@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cyber Escape Room - Public WiFi</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background: linear-gradient(180deg,#0f172a,#020617);
+  color:#e2e8f0;
+  text-align:center;
+}
+
+/* GAME BOX */
+.box{
+  background:#111c2e;
+  border:1px solid #38bdf8;
+  padding:22px;
+  margin:24px auto;
+  width:70%;
+  border-radius:14px;
+  box-shadow:0 0 18px rgba(56,189,248,0.15);
+}
+
+/* TITLE */
+h1{
+  color:#38bdf8;
+  letter-spacing:1px;
+}
+
+/* ALERT TEXT */
+.alert{
+  color:#f97316;
+  font-weight:bold;
+}
+
+/* BUTTONS */
+button{
+  padding:12px 18px;
+  margin:8px;
+  border:none;
+  border-radius:8px;
+  background:#1e293b;
+  color:#e2e8f0;
+  cursor:pointer;
+  font-size:16px;
+  transition:0.25s;
+}
+
+button:hover{
+  background:#38bdf8;
+  color:#020617;
+  transform:scale(1.05);
+}
+
+.correct{ color:#22c55e; font-weight:bold; }
+.wrong{ color:#ef4444; font-weight:bold; }
+
+.hidden{ display:none; }
+</style>
+</head>
+
+<body>
+
+<h1>🚨 CYBER ESCAPE ROOM: PUBLIC WI-FI 🚨</h1>
+<p class="alert">Hackers are watching… Make smart choices to escape!</p>
+
+<!-- STEP 1 -->
+<div class="box" id="step1">
+<h2>Challenge 1: Fake Wi-Fi Trap</h2>
+<p>Which network is REAL?</p>
+
+<button onclick="wifi('wrong')">Airport_Free_W1fi</button>
+<button onclick="wifi('correct')">Airport_Free_Wifi</button>
+<button onclick="wifi('wrong')">AirportFreeWifi!!</button>
+
+<p id="r1"></p>
+</div>
+
+<!-- STEP 2 -->
+<div class="box hidden" id="step2">
+<h2>Challenge 2: Check Before Login</h2>
+<p>You open a website… what do you check first?</p>
+
+<button onclick="httpsCheck('correct')">Look for 🔒 HTTPS</button>
+<button onclick="httpsCheck('wrong')">Type password quickly</button>
+<button onclick="httpsCheck('wrong')">Ignore address bar</button>
+
+<p id="r2"></p>
+</div>
+
+<!-- STEP 3 -->
+<div class="box hidden" id="step3">
+<h2>Challenge 3: Data Snooping</h2>
+<p>Which action is safest on public Wi-Fi?</p>
+
+<button onclick="snoop('wrong')">Online banking</button>
+<button onclick="snoop('correct')">Watching videos only</button>
+<button onclick="snoop('wrong')">Sending private info</button>
+
+<p id="r3"></p>
+</div>
+
+<!-- STEP 4 -->
+<div class="box hidden" id="step4">
+<h2>Challenge 4: Evil Twin Attack</h2>
+<p>The Wi-Fi reconnects automatically.</p>
+
+<button onclick="evil('correct')">Turn off Auto-Join</button>
+<button onclick="evil('wrong')">Keep reconnecting</button>
+<button onclick="evil('wrong')">Enter passwords again</button>
+
+<p id="r4"></p>
+</div>
+
+<!-- STEP 5 -->
+<div class="box hidden" id="step5">
+<h2>FINAL CHALLENGE 🚨</h2>
+<p>Which site is secure?</p>
+
+<button onclick="finalStep('wrong')">http://shop-free.com</button>
+<button onclick="finalStep('correct')">https://shop-free.com 🔒</button>
+
+<p id="r5"></p>
+</div>
+
+<div class="box hidden" id="win">
+<h2>🎉 SYSTEM SECURED 🎉</h2>
+<p>You escaped the hackers using smart Public Wi-Fi skills!</p>
+</div>
+
+<script>
+function wifi(c){
+ if(c==="correct"){
+   r1.innerHTML="<span class='correct'>✅ You avoided a fake hotspot!</span>";
+   step2.classList.remove("hidden");
+ }else{
+   r1.innerHTML="<span class='wrong'>🚨 Hacker Alert! Fake network.</span>";
+ }
+}
+
+function httpsCheck(c){
+ if(c==="correct"){
+   r2.innerHTML="<span class='correct'>🔒 Smart! Always check HTTPS.</span>";
+   step3.classList.remove("hidden");
+ }else{
+   r2.innerHTML="<span class='wrong'>⚠️ Hacker intercepted your login!</span>";
+ }
+}
+
+function snoop(c){
+ if(c==="correct"){
+   r3.innerHTML="<span class='correct'>🎯 Good choice! Avoid sensitive tasks.</span>";
+   step4.classList.remove("hidden");
+ }else{
+   r3.innerHTML="<span class='wrong'>🚨 Data stolen!</span>";
+ }
+}
+
+function evil(c){
+ if(c==="correct"){
+   r4.innerHTML="<span class='correct'>🛡️ Evil Twin blocked!</span>";
+   step5.classList.remove("hidden");
+ }else{
+   r4.innerHTML="<span class='wrong'>⚠️ Fake network gained access!</span>";
+ }
+}
+
+function finalStep(c){
+ if(c==="correct"){
+   r5.innerHTML="<span class='correct'>🔓 Secure connection!</span>";
+   win.classList.remove("hidden");
+ }else{
+   r5.innerHTML="<span class='wrong'>❌ Not encrypted!</span>";
+ }
+}
+</script>
+
+</body>
+</html>
