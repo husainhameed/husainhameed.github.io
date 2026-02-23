@@ -1,41 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Password Cracking Demo</title>
+  <title>Guessing Attack Demo</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #0f172a;
-      color: white;
+      font-family: monospace;
+      background-color: black;
+      color: #00ff00;
       text-align: center;
-      padding-top: 80px;
+      padding-top: 60px;
     }
     .box {
-      background: #1e293b;
-      padding: 40px;
-      width: 400px;
+      width: 500px;
       margin: auto;
-      border-radius: 10px;
     }
     input {
-      width: 90%;
       padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
-      border: none;
       font-size: 18px;
+      margin: 10px;
+      width: 200px;
+      text-align: center;
     }
     button {
       padding: 10px 20px;
-      background: #22d3ee;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
       font-size: 16px;
+      cursor: pointer;
     }
-    #result {
+    #terminal {
       margin-top: 20px;
-      font-size: 18px;
+      height: 250px;
+      overflow-y: auto;
+      border: 1px solid #00ff00;
+      padding: 10px;
+      text-align: left;
+      background: #001100;
     }
   </style>
 </head>
@@ -43,53 +41,53 @@
 <body>
 
 <div class="box">
-  <h2>Password Brute Force Simulator</h2>
-  <p>Enter a numeric password (digits only)</p>
-  <input type="text" id="password" placeholder="Example: 1234">
-  <button onclick="simulate()">Start Attack</button>
+  <h2>Brute Force Simulator (1–1000)</h2>
+  <p>Enter a number between 1 and 1000</p>
+  <input type="number" id="password" min="1" max="1000">
+  <br>
+  <button onclick="startAttack()">Start Attack</button>
 
-  <div id="result"></div>
+  <div id="terminal"></div>
 </div>
 
 <script>
-function simulate() {
-  let pass = document.getElementById("password").value;
-  
-  if (!/^\d+$/.test(pass)) {
-    alert("Digits only for this demo!");
+let interval;
+
+function startAttack() {
+  const pass = parseInt(document.getElementById("password").value);
+  const terminal = document.getElementById("terminal");
+
+  if (pass < 1 || pass > 1000 || isNaN(pass)) {
+    alert("Please enter a number between 1 and 1000.");
     return;
   }
 
-  let length = pass.length;
-  let combinations = Math.pow(10, length);
+  terminal.innerHTML = "";
+  let attempt = 1;
+  const startTime = new Date().getTime();
 
-  // Assume attacker can try 1 billion guesses per second
-  let guessesPerSecond = 1000000000;
-  let seconds = combinations / guessesPerSecond;
+  interval = setInterval(() => {
+    terminal.innerHTML += "Trying: " + attempt + "<br>";
+    terminal.scrollTop = terminal.scrollHeight;
 
-  let timeDisplay;
-  
-  if (seconds < 1) {
-    timeDisplay = "Less than 1 second";
-  } else if (seconds < 60) {
-    timeDisplay = seconds.toFixed(2) + " seconds";
-  } else if (seconds < 3600) {
-    timeDisplay = (seconds / 60).toFixed(2) + " minutes";
-  } else if (seconds < 86400) {
-    timeDisplay = (seconds / 3600).toFixed(2) + " hours";
-  } else if (seconds < 31536000) {
-    timeDisplay = (seconds / 86400).toFixed(2) + " days";
-  } else {
-    timeDisplay = (seconds / 31536000).toFixed(2) + " years";
-  }
+    if (attempt === pass) {
+      clearInterval(interval);
+      const endTime = new Date().getTime();
+      const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
 
-  document.getElementById("result").innerHTML = `
-    <hr>
-    <p>Password Length: <strong>${length}</strong></p>
-    <p>Total Possible Combinations: <strong>${combinations.toLocaleString()}</strong></p>
-    <p>Estimated Time to Crack: <strong style="color:#22d3ee;">${timeDisplay}</strong></p>
-    <p style="color:red;"><strong>Longer passwords increase cracking time exponentially.</strong></p>
-  `;
+      terminal.innerHTML += "<br><span style='color:red;'>ACCESS GRANTED</span><br>";
+      terminal.innerHTML += "Password found in " + attempt + " attempts<br>";
+      terminal.innerHTML += "Time taken: " + timeTaken + " seconds<br>";
+      terminal.innerHTML += "<br><strong>Now imagine 1 to 1,000,000...</strong>";
+    }
+
+    attempt++;
+
+    if (attempt > 1000) {
+      clearInterval(interval);
+    }
+
+  }, 5); // speed (lower number = faster)
 }
 </script>
 
