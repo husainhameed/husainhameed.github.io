@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Guessing Attack Demo</title>
+  <title>Massive Brute Force Simulator</title>
   <style>
     body {
       font-family: monospace;
       background-color: black;
       color: #00ff00;
       text-align: center;
-      padding-top: 60px;
+      padding-top: 50px;
     }
     .box {
-      width: 500px;
+      width: 600px;
       margin: auto;
     }
     input {
       padding: 10px;
       font-size: 18px;
       margin: 10px;
-      width: 200px;
+      width: 300px;
       text-align: center;
     }
     button {
@@ -41,9 +41,9 @@
 <body>
 
 <div class="box">
-  <h2>Brute Force Simulator (1–1000)</h2>
-  <p>Enter a number between 1 and 1000</p>
-  <input type="number" id="password" min="1" max="1000">
+  <h2>Brute Force Attack Simulator (1 – 999,999,999)</h2>
+  <p>Enter a number between 1 and 999,999,999</p>
+  <input type="number" id="password" min="1" max="999999999">
   <br>
   <button onclick="startAttack()">Start Attack</button>
 
@@ -57,8 +57,8 @@ function startAttack() {
   const pass = parseInt(document.getElementById("password").value);
   const terminal = document.getElementById("terminal");
 
-  if (pass < 1 || pass > 1000 || isNaN(pass)) {
-    alert("Please enter a number between 1 and 1000.");
+  if (pass < 1 || pass > 999999999 || isNaN(pass)) {
+    alert("Enter a number between 1 and 999,999,999");
     return;
   }
 
@@ -67,27 +67,30 @@ function startAttack() {
   const startTime = new Date().getTime();
 
   interval = setInterval(() => {
-    terminal.innerHTML += "Trying: " + attempt + "<br>";
+
+    // Skip faster if far away
+    let step = Math.max(1, Math.floor((pass - attempt) / 20));
+    attempt += step;
+
+    terminal.innerHTML += "Trying: " + attempt.toLocaleString() + "<br>";
     terminal.scrollTop = terminal.scrollHeight;
 
-    if (attempt === pass) {
+    if (attempt >= pass) {
       clearInterval(interval);
+
       const endTime = new Date().getTime();
       const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
 
       terminal.innerHTML += "<br><span style='color:red;'>ACCESS GRANTED</span><br>";
-      terminal.innerHTML += "Password found in " + attempt + " attempts<br>";
-      terminal.innerHTML += "Time taken: " + timeTaken + " seconds<br>";
-      terminal.innerHTML += "<br><strong>Now imagine 1 to 1,000,000...</strong>";
+      terminal.innerHTML += "Password found at: " + pass.toLocaleString() + "<br>";
+      terminal.innerHTML += "Time taken: " + timeTaken + " seconds<br><br>";
+
+      terminal.innerHTML += "<strong>This was only numbers.</strong><br>";
+      terminal.innerHTML += "Imagine adding letters + symbols...<br>";
+      terminal.innerHTML += "The combinations explode exponentially.";
     }
 
-    attempt++;
-
-    if (attempt > 1000) {
-      clearInterval(interval);
-    }
-
-  }, 5); // speed (lower number = faster)
+  }, 30);
 }
 </script>
 
