@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Social Engineering Simulation</title>
+<title>Phishing Escape Room</title>
 
 <style>
 body {
+  margin: 0;
   background: #0f172a;
   color: white;
   font-family: Arial, sans-serif;
   text-align: center;
-  padding-top: 60px;
+}
+
+.container {
+  padding: 40px;
 }
 
 .card {
   background: #1e293b;
-  width: 500px;
+  width: 600px;
   margin: auto;
   padding: 30px;
   border-radius: 10px;
@@ -33,66 +37,130 @@ button {
 .danger { background: #ef4444; color: white; }
 .safe { background: #22c55e; color: white; }
 
-#result {
+#score {
   margin-top: 20px;
   font-size: 18px;
 }
 
-.highlight { color: #facc15; }
 .red { color: #ef4444; }
+.green { color: #22c55e; }
+.yellow { color: #facc15; }
 
 </style>
 </head>
 
 <body>
 
-<div class="card" id="scenario">
-  <h2>📩 New Message Received</h2>
-  <p><strong>From:</strong> RVIS_Official_Support</p>
-  <p class="highlight">
-  Your school account will be suspended in 10 minutes.
-  Click below to verify immediately.
-  </p>
+<div class="container">
+  <h1>🎭 PHISHING ESCAPE ROOM 🎭</h1>
+  <h3>Can You Outsmart the Hacker?</h3>
 
-  <button class="danger" onclick="clicked()">VERIFY NOW</button>
-  <button class="safe" onclick="ignored()">IGNORE</button>
-  <button class="primary" onclick="reported()">REPORT</button>
+  <div class="card" id="game"></div>
 
-  <div id="result"></div>
+  <div id="score"></div>
 </div>
 
 <script>
 
-function clicked() {
-  document.getElementById("result").innerHTML = `
-  <hr>
-  <span class="red"><strong>⚠️ You were socially engineered.</strong></span><br><br>
-  Psychological tricks used:<br>
-  • Urgency ("10 minutes")<br>
-  • Authority ("Official Support")<br>
-  • Fear (Account suspension)<br><br>
-  Hackers don't hack systems first.<br>
-  They hack emotions.
+let currentScenario = 0;
+let points = 0;
+
+const scenarios = [
+
+{
+title: "📩 Urgent School Email",
+message: "Your school account will be suspended in 10 minutes. Click to verify now.",
+correct: "report",
+explanation: "This used URGENCY + FEAR + AUTHORITY."
+},
+
+{
+title: "🎁 Instagram Giveaway",
+message: "You won a new iPhone! Enter your login details to claim it.",
+correct: "ignore",
+explanation: "Too good to be true + Prize scam."
+},
+
+{
+title: "📱 WhatsApp From 'Principal'",
+message: "I need gift cards urgently. This is confidential.",
+correct: "report",
+explanation: "Authority impersonation + Urgency."
+},
+
+{
+title: "🤖 AI Voice Message",
+message: "Your parent’s voice says: 'Send me money now.'",
+correct: "verify",
+explanation: "AI voice cloning. Always verify through another channel."
+}
+
+];
+
+function loadScenario() {
+  if (currentScenario >= scenarios.length) {
+    showFinal();
+    return;
+  }
+
+  let s = scenarios[currentScenario];
+
+  document.getElementById("game").innerHTML = `
+    <h2>${s.title}</h2>
+    <p class="yellow">${s.message}</p>
+
+    <button class="danger" onclick="choose('click')">Click / Respond</button>
+    <button class="safe" onclick="choose('ignore')">Ignore</button>
+    <button class="primary" onclick="choose('report')">Report</button>
+    <button onclick="choose('verify')">Verify First</button>
   `;
 }
 
-function ignored() {
-  document.getElementById("result").innerHTML = `
-  <hr>
-  Good instinct — but ignoring isn't always enough.<br>
-  It might still target others.<br><br>
-  The safest action is REPORTING.
+function choose(choice) {
+  let s = scenarios[currentScenario];
+  let result = "";
+
+  if (choice === s.correct) {
+    points += 25;
+    result = `<p class="green">✅ Correct Decision!</p>`;
+  } else {
+    result = `<p class="red">⚠️ Socially Engineered!</p>`;
+  }
+
+  result += `<p>${s.explanation}</p>`;
+
+  document.getElementById("game").innerHTML += result;
+
+  currentScenario++;
+
+  setTimeout(loadScenario, 2500);
+}
+
+function showFinal() {
+  let level = "";
+
+  if (points === 100) level = "🛡 CYBER NINJA";
+  else if (points >= 75) level = "🔐 Security Pro";
+  else if (points >= 50) level = "⚠️ Needs Awareness";
+  else level = "🚨 Easily Hackable";
+
+  document.getElementById("game").innerHTML = `
+    <h2>🎉 Simulation Complete</h2>
+    <p>Your Score: <strong>${points}/100</strong></p>
+    <h3>${level}</h3>
+    <br>
+    <p>Hackers manipulate:</p>
+    <p>• Fear</p>
+    <p>• Urgency</p>
+    <p>• Authority</p>
+    <p>• Greed</p>
+    <p>• Trust</p>
+    <br>
+    <p><strong>Think Before You Click.</strong></p>
   `;
 }
 
-function reported() {
-  document.getElementById("result").innerHTML = `
-  <hr>
-  ✅ Correct Action.<br><br>
-  You identified manipulation and reported it.<br><br>
-  That is how you stop phishing attacks.
-  `;
-}
+loadScenario();
 
 </script>
 
