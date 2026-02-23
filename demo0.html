@@ -1,173 +1,290 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Phishing Escape Room</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Real UI Lab</title>
 
 <style>
 body {
   margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   background: #0f172a;
-  color: white;
-  font-family: Arial, sans-serif;
   text-align: center;
+  color: white;
 }
 
 .container {
-  padding: 40px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-.card {
+.phone {
+  width: 360px;
+  border-radius: 30px;
+  background: #111;
+  padding: 15px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+}
+
+.screen {
+  border-radius: 25px;
+  min-height: 600px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease;
+}
+
+.theme-instagram { background: #000000; color: white; }
+.theme-benefitpay { background: #f4f6f8; color: #333; }
+.theme-whatsapp { background: #e5ddd5; color: #111; }
+.theme-sms { background: #ffffff; color: #111; }
+
+/* INSTAGRAM */
+.ig-header {
+  background: #000;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  border-bottom: 1px solid #262626;
+}
+.ig-chat { flex-grow: 1; padding: 15px; text-align: left; }
+.ig-msg {
+  background: #262626;
+  padding: 12px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  max-width: 75%;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+/* BENEFITPAY */
+.bank-header {
+  background: #0d47a1;
+  color: white;
+  padding: 20px 15px;
+  font-weight: bold;
+}
+.bank-body { flex-grow: 1; padding: 20px; }
+.bank-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* WHATSAPP */
+.wa-header {
+  background: #075e54;
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+  text-align: left;
+}
+.wa-chat { flex-grow: 1; padding: 15px; text-align: left; }
+.wa-msg {
+  background: white;
+  padding: 10px 14px;
+  border-radius: 0px 10px 10px 10px;
+  display: inline-block;
+  max-width: 75%;
+  font-size: 14px;
+}
+
+/* SMS */
+.sms-header {
+  background: #f9f9f9;
+  padding: 15px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  color: #000;
+}
+.sms-chat { flex-grow: 1; padding: 20px; text-align: left; }
+.sms-msg {
+  background: #e9e9eb;
+  color: #000;
+  padding: 12px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  max-width: 75%;
+}
+
+.action-bar {
   background: #1e293b;
-  width: 600px;
-  margin: auto;
-  padding: 30px;
-  border-radius: 10px;
+  padding: 15px 10px;
+  border-top: 2px solid #334155;
 }
 
 button {
-  margin: 10px;
-  padding: 10px 20px;
-  border-radius: 5px;
+  margin: 5px;
+  padding: 10px 12px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
-.primary { background: #3b82f6; color: white; }
-.danger { background: #ef4444; color: white; }
-.safe { background: #22c55e; color: white; }
+.safe { background: #22c55e; }
+.danger { background: #ef4444; }
+.verify { background: #3b82f6; }
+.report { background: #f59e0b; }
 
-.red { color: #ef4444; }
-.green { color: #22c55e; }
-.yellow { color: #facc15; }
+#feedback {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  min-height: 50px;
+}
+
+.green { color: #4ade80; }
+.red { color: #f87171; }
+
 </style>
 </head>
 
 <body>
 
 <div class="container">
-  <h1>🎭 PHISHING ESCAPE ROOM 🎭</h1>
-  <h3>Can You Outsmart the Hacker?</h3>
+  <div class="phone">
+    <div class="screen" id="screen"></div>
+  </div>
 
-  <div class="card" id="game"></div>
+  <div id="feedback"></div>
 </div>
 
 <script>
-
-let currentScenario = 0;
-let points = 0;
-let locked = false;
+let current = 0;
+let score = 0;
 
 const scenarios = [
 
 {
-title: "📩 Urgent School Email",
-message: "Your school account will be suspended in 10 minutes. Click to verify now.",
-correct: "report",
-explanation: "This used URGENCY + FEAR + AUTHORITY."
+type:"instagram",
+correct:"report",
+render:`
+<div class="ig-header"><span>←</span><span>verified_support_bh</span><span>ⓘ</span></div>
+<div class="ig-chat">
+<div class="ig-msg">
+🎉 Congratulations! You’ve won 500 BHD in our weekly draw.<br><br>
+Click below to log in and claim your prize now before it expires in 24 hours.
+</div>
+</div>`
 },
 
 {
-title: "🎁 Instagram Giveaway",
-message: "You won a new iPhone! Enter your login details to claim it.",
-correct: "report",
-explanation: "Too good to be true + Prize scam."
+type:"benefitpay",
+correct:"verify",
+render:`
+<div class="bank-header">BenefitPay Security</div>
+<div class="bank-body">
+<div class="bank-card">
+<p style="color:#d32f2f;"><strong>⚠️ Security Alert</strong></p>
+<p>Unusual login attempt detected on your account.</p>
+<p>Please log in immediately to verify your identity.</p>
+</div>
+</div>`
 },
 
 {
-title: "📱 WhatsApp From 'Principal'",
-message: "I need gift cards urgently. This is confidential.",
-correct: "report",
-explanation: "Authority impersonation + Urgency."
+type:"whatsapp",
+correct:"report",
+render:`
+<div class="wa-header">Principal</div>
+<div class="wa-chat">
+<div class="wa-msg">
+I am in a meeting and need Apple gift cards urgently.<br><br>
+Do not tell anyone, this is confidential. Send the codes here.
+</div>
+</div>`
 },
 
 {
-title: "🤖 AI Voice Message",
-message: "Your parent’s voice says: 'Send me money now.'",
-correct: "verify",
-explanation: "AI voice cloning. Always verify through another channel."
+type:"sms",
+correct:"report",
+render:`
+<div class="sms-header">Aramex_BH</div>
+<div class="sms-chat">
+<div class="sms-msg">
+Your shipment is held at Bahrain customs. Pay 2.5 BHD now:
+http://aramex-bh-delivery.com
+</div>
+</div>`
 }
-
 ];
 
-function loadScenario() {
+function loadScenario(){
 
-  locked = false;
+if(current>=scenarios.length){showFinal();return;}
 
-  if (currentScenario >= scenarios.length) {
-    showFinal();
-    return;
-  }
+let s=scenarios[current];
+let screenEl=document.getElementById("screen");
 
-  let s = scenarios[currentScenario];
+screenEl.className="screen theme-"+s.type;
 
-  document.getElementById("game").innerHTML = `
-    <h2>${s.title}</h2>
-    <p class="yellow">${s.message}</p>
+screenEl.innerHTML=`
+${s.render}
+<div class="action-bar">
+<button class="danger" onclick="choose('click')">Click Link</button>
+<button class="verify" onclick="choose('verify')">Verify Source</button>
+<button class="report" onclick="choose('report')">Report</button>
+</div>`;
 
-    <button class="danger" onclick="choose('click')">Click / Respond</button>
-    <button class="primary" onclick="choose('report')">Report</button>
-    <button class="safe" onclick="choose('verify')">Verify First</button>
-  `;
+document.getElementById("feedback").innerHTML="";
 }
 
-function choose(choice) {
+function choose(choice){
 
-  if(locked) return;
-  locked = true;
+let s=scenarios[current];
+let feedback="";
 
-  let s = scenarios[currentScenario];
-  let result = "";
-
-  if (choice === s.correct) {
-    points += 25;
-    result = `<p class="green">✅ Correct Decision!</p>`;
-  } else {
-    result = `<p class="red">⚠️ Socially Engineered!</p>`;
-  }
-
-  result += `<p>${s.explanation}</p>`;
-
-  document.getElementById("game").innerHTML = `
-    <h2>${s.title}</h2>
-    <p class="yellow">${s.message}</p>
-    ${result}
-    <button class="primary" onclick="nextScenario()">Continue ▶</button>
-  `;
+if(choice===s.correct){
+score+=25;
+feedback=`<p class="green">✅ Correct! Smart cyber decision.</p>`;
+}else{
+feedback=`<p class="red">⚠️ You were hacked! Hackers manipulate trust.</p>`;
 }
 
-function nextScenario(){
-  currentScenario++;
-  loadScenario();
+feedback+=`<button onclick="next()" style="padding:10px 20px;background:white;color:black;">Next Scenario</button>`;
+
+document.querySelectorAll('.action-bar button').forEach(btn=>btn.disabled=true);
+
+document.getElementById("feedback").innerHTML=feedback;
 }
 
-function showFinal() {
+function next(){
+current++;
+loadScenario();
+}
 
-  let level = "";
+function showFinal(){
 
-  if (points === 100) level = "🛡 CYBER NINJA";
-  else if (points >= 75) level = "🔐 Security Pro";
-  else if (points >= 50) level = "⚠️ Needs Awareness";
-  else level = "🚨 Easily Hackable";
+let level=score===100?"🛡 Cyber Defender":score>=75?"🔐 Security Aware":"🚨 Needs Awareness";
 
-  document.getElementById("game").innerHTML = `
-    <h2>🎉 Simulation Complete</h2>
-    <p>Your Score: <strong>${points}/100</strong></p>
-    <h3>${level}</h3>
-    <br>
-    <p>Hackers manipulate:</p>
-    <p>• Fear</p>
-    <p>• Urgency</p>
-    <p>• Authority</p>
-    <p>• Greed</p>
-    <p>• Trust</p>
-    <br>
-    <p><strong>Think Before You Click.</strong></p>
-  `;
+let screenEl=document.getElementById("screen");
+screenEl.className="screen theme-instagram";
+
+screenEl.innerHTML=`
+<div style="padding:40px 20px;">
+<h3 style="color:#4ade80;">Simulation Complete</h3>
+<h1>${score}/100</h1>
+<h2>${level}</h2>
+<p style="color:#fbbf24;font-weight:bold;">Think Before You Click.</p>
+</div>`;
+
+document.getElementById("feedback").innerHTML=
+`<button onclick="location.reload()" style="padding:10px 20px;background:white;color:black;">Restart Simulation</button>`;
 }
 
 loadScenario();
-
 </script>
 
 </body>
