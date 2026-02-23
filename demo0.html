@@ -56,6 +56,7 @@ button {
 
 let currentScenario = 0;
 let points = 0;
+let locked = false;
 
 const scenarios = [
 
@@ -91,6 +92,8 @@ explanation: "AI voice cloning. Always verify through another channel."
 
 function loadScenario() {
 
+  locked = false;
+
   if (currentScenario >= scenarios.length) {
     showFinal();
     return;
@@ -109,6 +112,9 @@ function loadScenario() {
 }
 
 function choose(choice) {
+
+  if(locked) return;
+  locked = true;
 
   let s = scenarios[currentScenario];
   let result = "";
