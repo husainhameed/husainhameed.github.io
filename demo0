@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Social Engineering Simulation</title>
+
+<style>
+body {
+  background: #0f172a;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.card {
+  background: #1e293b;
+  width: 500px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.primary { background: #3b82f6; color: white; }
+.danger { background: #ef4444; color: white; }
+.safe { background: #22c55e; color: white; }
+
+#result {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.highlight { color: #facc15; }
+.red { color: #ef4444; }
+
+</style>
+</head>
+
+<body>
+
+<div class="card" id="scenario">
+  <h2>📩 New Message Received</h2>
+  <p><strong>From:</strong> RVIS_Official_Support</p>
+  <p class="highlight">
+  Your school account will be suspended in 10 minutes.
+  Click below to verify immediately.
+  </p>
+
+  <button class="danger" onclick="clicked()">VERIFY NOW</button>
+  <button class="safe" onclick="ignored()">IGNORE</button>
+  <button class="primary" onclick="reported()">REPORT</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+
+function clicked() {
+  document.getElementById("result").innerHTML = `
+  <hr>
+  <span class="red"><strong>⚠️ You were socially engineered.</strong></span><br><br>
+  Psychological tricks used:<br>
+  • Urgency ("10 minutes")<br>
+  • Authority ("Official Support")<br>
+  • Fear (Account suspension)<br><br>
+  Hackers don't hack systems first.<br>
+  They hack emotions.
+  `;
+}
+
+function ignored() {
+  document.getElementById("result").innerHTML = `
+  <hr>
+  Good instinct — but ignoring isn't always enough.<br>
+  It might still target others.<br><br>
+  The safest action is REPORTING.
+  `;
+}
+
+function reported() {
+  document.getElementById("result").innerHTML = `
+  <hr>
+  ✅ Correct Action.<br><br>
+  You identified manipulation and reported it.<br><br>
+  That is how you stop phishing attacks.
+  `;
+}
+
+</script>
+
+</body>
+</html>
