@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Password Cracking Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0f172a;
+      color: white;
+      text-align: center;
+      padding-top: 80px;
+    }
+    .box {
+      background: #1e293b;
+      padding: 40px;
+      width: 400px;
+      margin: auto;
+      border-radius: 10px;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 18px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #22d3ee;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Password Brute Force Simulator</h2>
+  <p>Enter a numeric password (digits only)</p>
+  <input type="text" id="password" placeholder="Example: 1234">
+  <button onclick="simulate()">Start Attack</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+function simulate() {
+  let pass = document.getElementById("password").value;
+  
+  if (!/^\d+$/.test(pass)) {
+    alert("Digits only for this demo!");
+    return;
+  }
+
+  let length = pass.length;
+  let combinations = Math.pow(10, length);
+
+  // Assume attacker can try 1 billion guesses per second
+  let guessesPerSecond = 1000000000;
+  let seconds = combinations / guessesPerSecond;
+
+  let timeDisplay;
+  
+  if (seconds < 1) {
+    timeDisplay = "Less than 1 second";
+  } else if (seconds < 60) {
+    timeDisplay = seconds.toFixed(2) + " seconds";
+  } else if (seconds < 3600) {
+    timeDisplay = (seconds / 60).toFixed(2) + " minutes";
+  } else if (seconds < 86400) {
+    timeDisplay = (seconds / 3600).toFixed(2) + " hours";
+  } else if (seconds < 31536000) {
+    timeDisplay = (seconds / 86400).toFixed(2) + " days";
+  } else {
+    timeDisplay = (seconds / 31536000).toFixed(2) + " years";
+  }
+
+  document.getElementById("result").innerHTML = `
+    <hr>
+    <p>Password Length: <strong>${length}</strong></p>
+    <p>Total Possible Combinations: <strong>${combinations.toLocaleString()}</strong></p>
+    <p>Estimated Time to Crack: <strong style="color:#22d3ee;">${timeDisplay}</strong></p>
+    <p style="color:red;"><strong>Longer passwords increase cracking time exponentially.</strong></p>
+  `;
+}
+</script>
+
+</body>
+</html>
