@@ -1,51 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Brute Force Simulator</title>
+  <title>Supercomputer Brute Force Simulator</title>
   <style>
     body {
       font-family: monospace;
-      background-color: black;
+      background: black;
       color: #00ff00;
       text-align: center;
-      padding-top: 50px;
+      padding-top: 40px;
     }
+
+    h2 {
+      color: #00ff00;
+    }
+
     .box {
-      width: 600px;
+      width: 700px;
       margin: auto;
     }
+
     input {
       padding: 10px;
       font-size: 18px;
       margin: 10px;
       width: 300px;
       text-align: center;
+      background: black;
+      color: #00ff00;
+      border: 1px solid #00ff00;
     }
+
     button {
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      background: #001100;
+      color: #00ff00;
+      border: 1px solid #00ff00;
     }
+
     #terminal {
       margin-top: 20px;
-      height: 250px;
+      height: 300px;
       overflow-y: auto;
       border: 1px solid #00ff00;
-      padding: 10px;
+      padding: 15px;
       text-align: left;
       background: #001100;
     }
+
+    .red {
+      color: red;
+    }
+
+    .yellow {
+      color: yellow;
+    }
+
   </style>
 </head>
 
 <body>
 
 <div class="box">
-  <h2>Brute Force Attack Simulator</h2>
-  <p>Choose a secret number between 1 and 999,999,999</p>
+  <h2>⚡ SUPERCOMPUTER BRUTE FORCE SIMULATOR ⚡</h2>
+  <p>Enter a secret number (1 – 999,999,999)</p>
   <input type="password" id="password" placeholder="Enter secret number">
   <br>
-  <button onclick="startAttack()">Start Attack</button>
+  <button onclick="startAttack()">Launch Attack</button>
 
   <div id="terminal"></div>
 </div>
@@ -53,6 +76,12 @@
 <script>
 let interval;
 let secretNumber;
+
+function log(message) {
+  const terminal = document.getElementById("terminal");
+  terminal.innerHTML += message + "<br>";
+  terminal.scrollTop = terminal.scrollHeight;
+}
 
 function startAttack() {
   const input = document.getElementById("password");
@@ -63,24 +92,28 @@ function startAttack() {
     return;
   }
 
-  // Hide input field after submission
-  input.value = "";
   input.style.display = "none";
+  document.querySelector("button").style.display = "none";
 
   const terminal = document.getElementById("terminal");
   terminal.innerHTML = "";
+
+  log("Initializing attack sequence...");
+  log("Connecting to distributed GPU cluster...");
+  log("Allocating 128 virtual GPUs...");
+  log("Attack speed: 4.2 billion guesses per second");
+  log("<span class='yellow'>Beginning brute force...</span>");
+  log("------------------------------------------");
 
   let attempt = 1;
   const startTime = new Date().getTime();
 
   interval = setInterval(() => {
 
-    // Smart stepping (to avoid freezing browser)
-    let step = Math.max(1, Math.floor((secretNumber - attempt) / 25));
+    let step = Math.max(1, Math.floor((secretNumber - attempt) / 30));
     attempt += step;
 
-    terminal.innerHTML += "Trying: " + attempt.toLocaleString() + "<br>";
-    terminal.scrollTop = terminal.scrollHeight;
+    log("Trying: " + attempt.toLocaleString());
 
     if (attempt >= secretNumber) {
       clearInterval(interval);
@@ -88,11 +121,16 @@ function startAttack() {
       const endTime = new Date().getTime();
       const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
 
-      terminal.innerHTML += "<br><span style='color:red;'>ACCESS GRANTED</span><br>";
-      terminal.innerHTML += "Secret number was: " + secretNumber.toLocaleString() + "<br>";
-      terminal.innerHTML += "Time taken: " + timeTaken + " seconds<br><br>";
-      terminal.innerHTML += "<strong>This is only numbers.</strong><br>";
-      terminal.innerHTML += "Real passwords with letters + symbols are exponentially harder.";
+      log("------------------------------------------");
+      log("<span class='red'>ACCESS GRANTED</span>");
+      log("Secret number cracked: " + secretNumber.toLocaleString());
+      log("Time elapsed: " + timeTaken + " seconds");
+      log("");
+      log("<span class='yellow'>This was ONLY numbers.</span>");
+      log("Add letters + symbols + uppercase...");
+      log("The combinations grow EXPONENTIALLY.");
+      log("");
+      log("<span class='red'>Length beats complexity.</span>");
     }
 
   }, 40);
