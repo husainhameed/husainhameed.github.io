@@ -37,11 +37,6 @@ button {
 .danger { background: #ef4444; color: white; }
 .safe { background: #22c55e; color: white; }
 
-#score {
-  margin-top: 20px;
-  font-size: 18px;
-}
-
 .red { color: #ef4444; }
 .green { color: #22c55e; }
 .yellow { color: #facc15; }
@@ -55,7 +50,6 @@ button {
   <h3>Can You Outsmart the Hacker?</h3>
 
   <div class="card" id="game"></div>
-  <div id="score"></div>
 </div>
 
 <script>
@@ -128,11 +122,17 @@ function choose(choice) {
 
   result += `<p>${s.explanation}</p>`;
 
-  document.getElementById("game").innerHTML += result;
+  document.getElementById("game").innerHTML = `
+    <h2>${s.title}</h2>
+    <p class="yellow">${s.message}</p>
+    ${result}
+    <button class="primary" onclick="nextScenario()">Continue ▶</button>
+  `;
+}
 
+function nextScenario(){
   currentScenario++;
-
-  setTimeout(loadScenario, 2500);
+  loadScenario();
 }
 
 function showFinal() {
