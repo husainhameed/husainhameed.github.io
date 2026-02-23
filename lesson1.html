@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Think Before You Click | Cyber Command Elite</title>
+
+<style>
+:root {
+  --bg-dark: #050505;
+  --neon-blue: #00f3ff;
+  --glass-bg: rgba(15, 20, 30, 0.75);
+  --glass-border: rgba(0, 243, 255, 0.25);
+  --text-main: #ffffff;
+  --text-muted: #a0aec0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-dark);
+  background-image: 
+    linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridMove 20s linear infinite;
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+/* ===== CRT SCANLINES EFFECT ===== */
+body::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+/* ===== PROGRESS BAR ===== */
+#progressBar {
+  position: fixed;
+  top: 0; left: 0; height: 4px;
+  background: linear-gradient(90deg, #00f3ff, #3a7bd5, #00ff88);
+  width: 0%;
+  z-index: 999;
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+
+/* ===== AI GUIDE ===== */
+#aiGuide {
+  position: fixed;
+  bottom: 25px; right: 25px;
+  background: var(--glass-bg);
+  border: 1px solid var(--neon-blue);
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+  max-width: 280px;
+  z-index: 100;
+  transition: all 0.5s ease;
+  border-left: 4px solid var(--neon-blue);
+}
+.ai-title { font-weight: bold; color: var(--neon-blue); margin-bottom: 5px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;}
+
+/* ===== CONTAINER ===== */
+.container { max-width: 850px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
+
+/* ===== SECTION ===== */
+.section {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  margin: 80px auto;
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateY(60px) scale(0.95);
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.section.show { opacity: 1; transform: translateY(0) scale(1); }
+.section:hover { border-color: rgba(0, 243, 255, 0.5); box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,243,255,0.05); }
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 15px;
+}
+
+.section h2 { font-size: 2rem; }
+
+.threat-level {
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: var(--neon-blue);
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===== LIST ===== */
+.intel-list { list-style: none; color: #e2e8f0; line-height: 1.6;}
+.intel-list li { padding-left: 30px; margin-bottom: 15px; position: relative; font-size: 1.1rem; }
+.intel-list li::before { content: '⯎'; position: absolute; left: 0; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+strong { color: #fff; }
+
+/* ===== BUTTON ===== */
+.btn-wrapper { text-align: center; margin-top: 35px; }
+.action-btn {
+  display: inline-block;
+  padding: 16px 36px;
+  background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+  border-radius: 8px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  cursor: pointer;
+}
+.action-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 243, 255, 0.4); }
+.btn-danger { background: transparent; border: 2px solid #ff3366; color: #ff3366; }
+.btn-danger:hover { background: rgba(255, 51, 102, 0.1); box-shadow: 0 0 25px rgba(255, 51, 102, 0.4); transform: translateY(-3px); }
+
+/* ===== GOLDEN RULES ===== */
+.golden-rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px; }
+.rule-card { background: rgba(255,255,255,0.03); padding: 25px 20px; border-radius: 12px; text-align: center; border-top: 3px solid #00ff88; }
+.rule-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+.rule-card p { font-size: 0.95rem; color: var(--text-muted); }
+
+/* ===== HEADER & FOOTER ===== */
+header { padding: 100px 20px 60px; text-align: center; position: relative; z-index: 10;}
+header h1 { font-size: 3.5rem; text-shadow: 0 0 20px rgba(0, 243, 255, 0.6); text-transform: uppercase; font-weight: 900; margin-bottom: 10px;}
+.presenter { color: var(--neon-blue); font-size: 1.3rem; letter-spacing: 2px; }
+footer { text-align: center; padding: 40px; color: var(--text-muted); position: relative; z-index: 10; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 60px;}
+
+</style>
+</head>
+
+<body>
+
+<div id="progressBar"></div>
+
+<div id="aiGuide">
+  <div class="ai-title">🤖 Cyber Intel Guide</div>
+  <div id="aiText">Awaiting mission initialization...</div>
+</div>
+
+<header>
+  <h1>Think Before You Click</h1>
+  <p class="presenter">Dr. Husain Hameed • Innovation Hub</p>
+</header>
+
+<div class="container">
+
+  <div class="section" data-tip="90% of cyber attacks require human interaction to succeed. Always verify links before clicking.">
+    <div class="section-header">
+      <h2>System Access</h2>
+      <span class="threat-level" style="color:#ff3366;border-color:#ff3366;">Status: Unverified</span>
+    </div>
+    <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.6;">Please complete the registration sequence below.</p>
+    <div class="btn-wrapper">
+      <a href="https://husainhameed.github.io/register.html" target="_blank" class="action-btn btn-danger">Initialize Registration 🔓</a>
+    </div>
+  </div>
+
+  <div class="section" data-tip="Phishing is the #1 cyber threat in the Gulf region. Attackers prey on urgency and curiosity.">
+    <div class="section-header">
+      <h2>Human Deception</h2>
+      <span class="threat-level">Threat: Social Engineering</span>
+    </div>
+    <ul class="intel-list">
+      <li><strong>Hackers hack people.</strong> It is easier to manipulate your emotions than to write complex code to break into a server.</li>
+      <li>Attackers weaponize trust, fear, and urgency. "You won a prize!" or "Your account will be deleted in 24 hours!"</li>
+      <li>Beware of fake Instagram DMs and WhatsApp messages pretending to be official services or stranded friends.</li>
+    </ul>
+    <div class="btn-wrapper">
+      <a href="https://husainhameed.github.io/demo0.html" target="_blank" class="action-btn">Access Phishing Lab</a>
+    </div>
+  </div>
+
+  <div class="section" data-tip="An 8-character password can be cracked in less than an hour. A 16-character passphrase takes centuries.">
+    <div class="section-header">
+      <h2>Brute Force</h2>
+      <span class="threat-level">Threat: Weak Credentials</span>
+    </div>
+    <ul class="intel-list">
+      <li><strong>Password Reuse is Fatal:</strong> If you use the same password for Netflix and your Bank, a breach on one site compromises your entire life.</li>
+      <li>Hackers use automated "Credential Stuffing" tools to test thousands of leaked passwords per second.</li>
+      <li>Stop trying to remember complex passwords. Use a Password Manager and prioritize length (passphrases) over complexity.</li>
+    </ul>
+    <div class="btn-wrapper">
+      <a href="https://husainhameed.github.io/demo1.html" target="_blank" class="action-btn">Access Password Simulator</a>
+    </div>
+  </div>
+
+  <div class="section" data-tip="Hackers use tools like 'Wireshark' to invisibly intercept data on public cafe and mall networks.">
+    <div class="section-header">
+      <h2>Invisible Interception</h2>
+      <span class="threat-level">Threat: Public Wi-Fi</span>
+    </div>
+    <ul class="intel-list">
+      <li>That "Free Airport Wi-Fi" might actually be a hacker's laptop sitting two rows behind you.</li>
+      <li><strong>Man-in-the-Middle (MitM) Attacks:</strong> Attackers can silently intercept and read unencrypted data passing between your phone and the router.</li>
+      <li>Never log into BenefitPay, your primary email, or any sensitive account on a public network without a VPN.</li>
+    </ul>
+    <div class="btn-wrapper">
+      <a href="https://husainhameed.github.io/demo2.html" target="_blank" class="action-btn">Access Interception Radar</a>
+    </div>
+  </div>
+
+  <div class="section" data-tip="Your digital footprint creates a psychological profile that hackers use to write highly targeted spear-phishing emails.">
+    <div class="section-header">
+      <h2>The Eternal Record</h2>
+      <span class="threat-level">Threat: Digital Footprint</span>
+    </div>
+    <ul class="intel-list">
+      <li>Every post builds a permanent profile. Universities and employers are actively looking at your history.</li>
+      <li><strong>Delete ≠ Erased.</strong> Screenshots, cloud backups, and internet archives ensure that nothing is ever truly gone.</li>
+      <li>Your digital footprint is the exact data hackers use to figure out how to scam you personally.</li>
+    </ul>
+    <div class="btn-wrapper">
+      <a href="https://husainhameed.github.io/demo3.html" target="_blank" class="action-btn">Scan Reputation Score</a>
+    </div>
+  </div>
+
+  <div class="section" data-tip="AI voice cloning only requires a 3-second audio sample from your social media to replicate your voice perfectly.">
+    <div class="section-header">
+      <h2>Synthetic Reality</h2>
+      <span class="threat-level">Threat: AI Manipulation</span>
+    </div>
+    <ul class="intel-list">
+      <li>Seeing is no longer believing. AI can generate hyper-realistic videos and clone voices from short clips.</li>
+      <li>AI allows attackers to scale their operations, writing flawless phishing emails in seconds.</li>
+      <li>Always independently verify urgent requests for money or data.</li>
+    </ul>
+    <div class="btn-wrapper">
+      <a href="https://husainhameed.github.io/demo4.html" target="_blank" class="action-btn">Access AI Authenticity Test</a>
+    </div>
+  </div>
+
+  <div class="section" style="border-left: 4px solid #00ff88;" data-tip="Congratulations Agent. Remember: Awareness is your strongest tool. No software can protect you if you click a malicious link.">
+    <div class="section-header">
+      <h2>Mission Debrief</h2>
+      <span class="threat-level" style="color: #00ff88; border-color: #00ff88;">Status: Secured</span>
+    </div>
+    <p style="text-align: center; font-size: 1.2rem; font-weight: bold;">You are your first line of defense. Remember the 3 Key Actions:</p>
+    
+    <div class="golden-rules">
+      <div class="rule-card">
+        <h3>🛡️ Enable 2FA</h3>
+        <p>Add a second security layer to all critical accounts.</p>
+      </div>
+      <div class="rule-card">
+        <h3>🔐 Password Manager</h3>
+        <p>Generate, store, and automatically fill unique passwords.</p>
+      </div>
+      <div class="rule-card">
+        <h3>🧠 Think First</h3>
+        <p>Every link and attachment requires a moment of critical thought.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Think Before You Click: Cybersecurity in the Real World<br>Riffa Views International School</p>
+</footer>
+
+<script>
+/* PROGRESS BAR */
+window.addEventListener("scroll", () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.body.scrollHeight - window.innerHeight;
+  document.getElementById("progressBar").style.width = (scrollTop / docHeight) * 100 + "%";
+});
+
+/* SECTION OBSERVER & DYNAMIC AI GUIDE */
+const sections = document.querySelectorAll(".section");
+const aiText = document.getElementById("aiText");
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+      
+      // Update AI Guide with contextual tip
+      const tip = entry.target.getAttribute("data-tip");
+      if(tip) {
+        aiText.innerText = tip;
+      }
+    }
+  });
+}, { threshold: 0.45 }); // Trigger slightly later so they are focused on the card
+
+sections.forEach(sec => observer.observe(sec));
+
+// Trigger initial load
+setTimeout(() => {
+  sections.forEach(sec => {
+    if(sec.getBoundingClientRect().top < window.innerHeight) {
+      sec.classList.add("show");
+      aiText.innerText = sec.getAttribute("data-tip");
+    }
+  });
+}, 100);
+
+</script>
+
+</body>
+</html>
