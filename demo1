@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Real UI Lab</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0f172a;
+    text-align: center;
+    color: white;
+  }
+
+  .container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Centers the phone vertically */
+  }
+
+  .phone {
+    width: 360px;
+    border-radius: 30px;
+    background: #111;
+    padding: 15px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  }
+
+  .screen {
+    border-radius: 25px;
+    min-height: 600px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s ease;
+  }
+
+  /* --- DYNAMIC THEMES --- */
+  .theme-instagram { background: #000000; color: white; }
+  .theme-benefitpay { background: #f4f6f8; color: #333; }
+  .theme-whatsapp { background: #e5ddd5; color: #111; }
+  .theme-sms { background: #ffffff; color: #111; }
+
+  /* INSTAGRAM STYLE */
+  .ig-header {
+    background: #000;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+    border-bottom: 1px solid #262626;
+  }
+  .ig-chat { flex-grow: 1; padding: 15px; text-align: left; }
+  .ig-msg {
+    background: #262626;
+    padding: 12px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    max-width: 75%;
+    font-size: 14px;
+    margin-top: 15px;
+    color: white;
+  }
+
+  /* BENEFITPAY STYLE */
+  .bank-header {
+    background: #0d47a1;
+    color: white;
+    padding: 20px 15px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  .bank-body { flex-grow: 1; padding: 20px; }
+  .bank-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
+    color: #333;
+  }
+
+  /* WHATSAPP STYLE */
+  .wa-header {
+    background: #075e54;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .wa-chat { flex-grow: 1; padding: 15px; text-align: left; }
+  .wa-msg {
+    background: white;
+    padding: 10px 14px;
+    border-radius: 0px 10px 10px 10px;
+    display: inline-block;
+    max-width: 75%;
+    font-size: 14px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  }
+
+  /* SMS STYLE */
+  .sms-header {
+    background: #f9f9f9;
+    padding: 15px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    color: #000;
+  }
+  .sms-chat { flex-grow: 1; padding: 20px; text-align: left; }
+  .sms-msg {
+    background: #e9e9eb;
+    color: #000;
+    padding: 12px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    max-width: 75%;
+    font-size: 15px;
+  }
+
+  /* ACTION BAR */
+  .action-bar {
+    background: #1e293b;
+    padding: 15px 10px;
+    border-top: 2px solid #334155;
+  }
+
+  button {
+    margin: 5px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: transform 0.1s;
+  }
+  button:active { transform: scale(0.95); }
+
+  .safe { background: #22c55e; color: white; }
+  .danger { background: #ef4444; color: white; }
+  .verify { background: #3b82f6; color: white; }
+  .report { background: #f59e0b; color: white; }
+
+  #feedback {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    min-height: 50px;
+  }
+
+  .green { color: #4ade80; }
+  .red { color: #f87171; }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="phone">
+    <div class="screen" id="screen">
+      </div>
+  </div>
+
+  <div id="feedback"></div>
+</div>
+
+<script>
+  let current = 0;
+  let score = 0;
+
+  const scenarios = [
+    {
+      type: "instagram",
+      correct: "ignore",
+      render: `
+        <div class="ig-header">
+          <span>←</span>
+          <span>verified_support_bh</span>
+          <span>ⓘ</span>
+        </div>
+        <div class="ig-chat">
+          <div class="ig-msg">
+            🎉 Congratulations! You’ve won 500 BHD in our weekly draw.<br><br>
+            Click below to log in and claim your prize now before it expires in 24 hours.
+          </div>
+        </div>
+      `
+    },
+    {
+      type: "benefitpay",
+      correct: "verify",
+      render: `
+        <div class="bank-header">
+          BenefitPay Security
+        </div>
+        <div class="bank-body">
+          <div class="bank-card">
+            <p style="color: #d32f2f;"><strong>⚠️ Security Alert</strong></p>
+            <p>Unusual login attempt detected on your account.</p>
+            <p>Please log in immediately to verify your identity and avoid suspension of services.</p>
+          </div>
+        </div>
+      `
+    },
+    {
+      type: "whatsapp",
+      correct: "report",
+      render: `
+        <div class="wa-header">
+          <div style="width:30px; height:30px; background:#ccc; border-radius:50%;"></div>
+          Principal
+        </div>
+        <div class="wa-chat">
+          <div class="wa-msg">
+            I am in a meeting and need Apple gift cards urgently for a school presentation.<br><br>
+            Do not tell anyone, this is confidential. Send the codes here.
+          </div>
+        </div>
+      `
+    },
+    {
+      type: "sms",
+      correct: "report",
+      render: `
+        <div class="sms-header">
+          Aramex_BH
+        </div>
+        <div class="sms-chat">
+          <div class="sms-msg">
+            Your shipment is held at Bahrain customs. Pay 2.5 BHD customs fee immediately to release your package: http://aramex-bh-delivery.com
+          </div>
+        </div>
+      `
+    }
+  ];
+
+  function loadScenario() {
+    if (current >= scenarios.length) {
+      showFinal();
+      return;
+    }
+
+    let s = scenarios[current];
+    let screenEl = document.getElementById("screen");
+
+    screenEl.className = "screen theme-" + s.type;
+
+    screenEl.innerHTML = `
+      ${s.render}
+      <div class="action-bar">
+        <button class="danger" onclick="choose('click')">Click Link</button>
+        <button class="safe" onclick="choose('ignore')">Ignore</button>
+        <button class="verify" onclick="choose('verify')">Verify Source</button>
+        <button class="report" onclick="choose('report')">Report</button>
+      </div>
+    `;
+
+    document.getElementById("feedback").innerHTML = "";
+  }
+
+  function choose(choice) {
+    let s = scenarios[current];
+    let feedback = "";
+
+    if (choice === s.correct) {
+      score += 25;
+      feedback = `<p class="green">✅ Correct! You didn't fall for it.</p>`;
+    } else {
+      feedback = `<p class="red">⚠️ You were hacked! Hackers manipulate trust.</p>`;
+    }
+
+    feedback += `<button onclick="next()" style="padding: 10px 20px; background: white; color: black;">Next Scenario</button>`;
+    
+    const buttons = document.querySelectorAll('.action-bar button');
+    buttons.forEach(btn => btn.disabled = true);
+
+    document.getElementById("feedback").innerHTML = feedback;
+  }
+
+  function next() {
+    current++;
+    loadScenario();
+  }
+
+  function showFinal() {
+    let level = score === 100 ? "🛡 Cyber Defender"
+              : score >= 75 ? "🔐 Security Aware"
+              : "🚨 Needs Awareness";
+
+    let screenEl = document.getElementById("screen");
+    screenEl.className = "screen theme-instagram";
+
+    screenEl.innerHTML = `
+      <div style="padding:40px 20px; display:flex; flex-direction:column; justify-content:center; height:100%;">
+        <h3 style="color:#4ade80;">Simulation Complete</h3>
+        <h1 style="font-size: 48px; margin: 10px 0;">${score}/100</h1>
+        <h2>${level}</h2>
+        <div style="background: #262626; padding: 20px; border-radius: 15px; margin-top: 20px; font-size: 15px;">
+          <p>Hackers manipulate fear, urgency, authority, and trust.</p>
+          <p style="color: #fbbf24; font-weight: bold; font-size: 18px;">Think Before You Click.</p>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("feedback").innerHTML = `<button onclick="location.reload()" style="padding: 10px 20px; background: white; color: black;">Restart Simulation</button>`;
+  }
+
+  loadScenario();
+
+</script>
+
+</body>
+</html>
