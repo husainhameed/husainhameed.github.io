@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>School Portal Login</title>
+  <title>RVIS Student Portal</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
     .box {
       background: #1e293b;
       padding: 40px;
-      width: 300px;
+      width: 320px;
       margin: auto;
       border-radius: 10px;
     }
@@ -38,18 +38,25 @@
 
 <div class="box" id="loginBox">
   <h2>RVIS Student Portal</h2>
-  <input type="text" placeholder="Username">
-  <input type="password" placeholder="Password">
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
   <button onclick="fakeLogin()">Login</button>
 </div>
 
 <script>
 function fakeLogin() {
+  var user = document.getElementById("username").value;
+  var pass = document.getElementById("password").value;
+
   document.getElementById("loginBox").innerHTML = `
-    <h2 style="color:red;">⚠️ This Was a Phishing Simulation</h2>
-    <p>If this were a real phishing site, your password would now be stolen.</p>
-    <p>Hackers don’t need to hack computers.</p>
-    <p><strong>They just need you to type your password.</strong></p>
+    <h2 style="color:red;">⚠️ PHISHING SIMULATION</h2>
+    <p><strong>This is what you just typed:</strong></p>
+    <p>Username: <span style="color:#22d3ee;">${user}</span></p>
+    <p>Password: <span style="color:#22d3ee;">${pass}</span></p>
+    <hr>
+    <p>If this were a real phishing site, your password would now belong to a hacker.</p>
+    <p><strong>Hackers don't hack computers.</strong></p>
+    <p><strong>They hack people.</strong></p>
   `;
 }
 </script>
