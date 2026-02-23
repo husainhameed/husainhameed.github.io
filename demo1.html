@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Massive Brute Force Simulator</title>
+  <title>Brute Force Simulator</title>
   <style>
     body {
       font-family: monospace;
@@ -41,9 +41,9 @@
 <body>
 
 <div class="box">
-  <h2>Brute Force Attack Simulator (1 – 999,999,999)</h2>
-  <p>Enter a number between 1 and 999,999,999</p>
-  <input type="number" id="password" min="1" max="999999999">
+  <h2>Brute Force Attack Simulator</h2>
+  <p>Choose a secret number between 1 and 999,999,999</p>
+  <input type="password" id="password" placeholder="Enter secret number">
   <br>
   <button onclick="startAttack()">Start Attack</button>
 
@@ -52,45 +52,50 @@
 
 <script>
 let interval;
+let secretNumber;
 
 function startAttack() {
-  const pass = parseInt(document.getElementById("password").value);
-  const terminal = document.getElementById("terminal");
+  const input = document.getElementById("password");
+  secretNumber = parseInt(input.value);
 
-  if (pass < 1 || pass > 999999999 || isNaN(pass)) {
+  if (secretNumber < 1 || secretNumber > 999999999 || isNaN(secretNumber)) {
     alert("Enter a number between 1 and 999,999,999");
     return;
   }
 
+  // Hide input field after submission
+  input.value = "";
+  input.style.display = "none";
+
+  const terminal = document.getElementById("terminal");
   terminal.innerHTML = "";
+
   let attempt = 1;
   const startTime = new Date().getTime();
 
   interval = setInterval(() => {
 
-    // Skip faster if far away
-    let step = Math.max(1, Math.floor((pass - attempt) / 20));
+    // Smart stepping (to avoid freezing browser)
+    let step = Math.max(1, Math.floor((secretNumber - attempt) / 25));
     attempt += step;
 
     terminal.innerHTML += "Trying: " + attempt.toLocaleString() + "<br>";
     terminal.scrollTop = terminal.scrollHeight;
 
-    if (attempt >= pass) {
+    if (attempt >= secretNumber) {
       clearInterval(interval);
 
       const endTime = new Date().getTime();
       const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
 
       terminal.innerHTML += "<br><span style='color:red;'>ACCESS GRANTED</span><br>";
-      terminal.innerHTML += "Password found at: " + pass.toLocaleString() + "<br>";
+      terminal.innerHTML += "Secret number was: " + secretNumber.toLocaleString() + "<br>";
       terminal.innerHTML += "Time taken: " + timeTaken + " seconds<br><br>";
-
-      terminal.innerHTML += "<strong>This was only numbers.</strong><br>";
-      terminal.innerHTML += "Imagine adding letters + symbols...<br>";
-      terminal.innerHTML += "The combinations explode exponentially.";
+      terminal.innerHTML += "<strong>This is only numbers.</strong><br>";
+      terminal.innerHTML += "Real passwords with letters + symbols are exponentially harder.";
     }
 
-  }, 30);
+  }, 40);
 }
 </script>
 
