@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Digital Footprint Game</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background: linear-gradient(180deg,#0f172a,#020617);
+  color:#e2e8f0;
+  text-align:center;
+}
+
+h1{
+  color:#38bdf8;
+}
+
+.box{
+  background:#111c2e;
+  border:1px solid #38bdf8;
+  padding:24px;
+  margin:30px auto;
+  width:70%;
+  border-radius:14px;
+  box-shadow:0 0 18px rgba(56,189,248,0.15);
+}
+
+button{
+  padding:12px 18px;
+  margin:10px;
+  border:none;
+  border-radius:8px;
+  background:#1e293b;
+  color:#e2e8f0;
+  cursor:pointer;
+  font-size:16px;
+  transition:0.25s;
+}
+
+button:hover{
+  background:#38bdf8;
+  color:#020617;
+  transform:scale(1.05);
+}
+
+.correct{ color:#22c55e; font-weight:bold; }
+.wrong{ color:#ef4444; font-weight:bold; }
+
+#score{
+  font-size:20px;
+  margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📱 DIGITAL FOOTPRINT SCANNER</h1>
+<p>You think you are posting for friends… but who ELSE can see it?</p>
+
+<div id="score">Reputation Score: 50</div>
+
+<div class="box">
+<h2>Choose Your Post</h2>
+
+<button onclick="scan('party')">📸 Post a wild party photo</button>
+<button onclick="scan('kind')">🤝 Post a volunteering photo</button>
+<button onclick="scan('rant')">💬 Post an angry comment</button>
+
+<div id="result" style="margin-top:15px;"></div>
+</div>
+
+<div class="box">
+<h2>👁️ Who Can See Your Digital Footprint?</h2>
+<p>Universities • Employers • Strangers • Future You</p>
+</div>
+
+<script>
+let reputation = 50;
+
+function updateScore(){
+  document.getElementById("score").innerHTML="Reputation Score: "+reputation;
+}
+
+function scan(type){
+
+if(type==="party"){
+reputation -= 10;
+result.innerHTML=
+"<span class='wrong'>👀 Stranger: Screenshot saved.<br>💼 Employer: Questions professionalism.<br>🎓 University: May review your online behaviour.</span>";
+}
+
+if(type==="kind"){
+reputation += 15;
+result.innerHTML=
+"<span class='correct'>🎓 University: Positive impact!<br>💼 Employer: Shows responsibility.<br>👀 Stranger: Sees a respectful profile.</span>";
+}
+
+if(type==="rant"){
+reputation -= 15;
+result.innerHTML=
+"<span class='wrong'>💼 Employer: Negative impression.<br>🎓 University: Could affect reputation.<br>👀 Stranger: Shares it beyond your control.</span>";
+}
+
+updateScore();
+
+if(reputation >= 80){
+result.innerHTML += "<br><br>🌟 TRUSTED DIGITAL PROFILE!";
+}
+
+if(reputation <= 20){
+result.innerHTML += "<br><br>⚠️ RISKY DIGITAL FOOTPRINT!";
+}
+}
+</script>
+
+</body>
+</html>
